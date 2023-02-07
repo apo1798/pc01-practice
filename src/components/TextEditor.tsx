@@ -4,10 +4,15 @@
 /* eslint-disable @typescript-eslint/promise-function-async */
 import { useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { Controller, type UseFormRegister } from 'react-hook-form';
+import {
+  Controller,
+  type UseFormRegister,
+  type Control
+} from 'react-hook-form';
 
 import { type Editor as TinyMceEditor } from 'tinymce';
 import { type FormValuesType } from '@/src/components/page/Index';
+import { Typography } from '@mui/material';
 
 // Dynamically imports tinymce, making only available in client side
 const Editor = dynamic(
@@ -20,6 +25,7 @@ const Editor = dynamic(
 
 type Props = {
   register: UseFormRegister<FormValuesType>;
+  control: Control<FormValuesType>;
 };
 
 const TextEditor = ({ register, control }: Props) => {
@@ -40,10 +46,13 @@ const TextEditor = ({ register, control }: Props) => {
 
   return (
     <div>
+      <Typography component="h3" variant="h6">
+        組織文案
+      </Typography>
       <Controller
         name="pageHtml"
         control={control}
-        render={({ field: { onChange } }) => {
+        render={({ field: { onChange, value: initialValue } }) => {
           return (
             <>
               <Editor
@@ -51,7 +60,7 @@ const TextEditor = ({ register, control }: Props) => {
                 // make mce package available on our package
                 apiKey={process.env.TINYMCE_API_KEY}
                 onInit={(_, editor) => (editorRef.current = editor)}
-                // value={values.descriptionHtml}
+                value={initialValue}
                 onEditorChange={(value) => {
                   console.log(value);
                   onChange(value);
@@ -86,7 +95,7 @@ const TextEditor = ({ register, control }: Props) => {
                     'wordcount'
                   ],
                   toolbar:
-                    'undo redo | blocks |  ' +
+                    'undo redo | blocks | underline' +
                     'bold italic forecolor backcolor image link preview | alignleft aligncenter ' +
                     'alignright alignjustify | bullist numlist outdent indent code | ' +
                     'removeformat wordcount help ',

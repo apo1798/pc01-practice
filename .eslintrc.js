@@ -5,8 +5,10 @@ module.exports = {
     node: true
   },
   extends: [
+    'eslint:recommended',
     'plugin:react/recommended',
     'standard-with-typescript',
+    'plugin:@typescript-eslint/recommended',
     'next/core-web-vitals',
     'prettier'
   ],
@@ -16,7 +18,9 @@ module.exports = {
     sourceType: 'module',
     project: ['tsconfig.json']
   },
-  plugins: ['react'],
+  parser: '@typescript-eslint/parser',
+  plugins: ['react', '@typescript-eslint'],
+  root: true,
   rules: {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/consistent-type-definitions': ['warn', 'type'],

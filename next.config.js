@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /** @type {import('next').NextConfig} */
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
@@ -6,7 +7,7 @@ const nextConfig = {
   reactStrictMode: true,
   output: 'standalone',
   images: {
-    domains: ['images.pexels.com']
+    domains: ['images.pexels.com', 'images.unsplash.com']
   },
   typescript: {
     ignoreBuildErrors: true
@@ -22,9 +23,6 @@ const nextConfig = {
         ]
       })
     );
-    return config;
-  },
-  webpackDevMiddleware: (config) => {
     return config;
   }
 };

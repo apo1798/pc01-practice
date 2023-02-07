@@ -1,6 +1,15 @@
-import { useRef, useState, type ReactNode } from 'react';
+import { type ChangeEvent, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
-import { CssBaseline } from '@mui/material';
+import {
+  Box,
+  CssBaseline,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  type SelectChangeEvent
+} from '@mui/material';
 import styled from '@emotion/styled';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
@@ -11,14 +20,20 @@ type Props = {
 
 const PreviewIfame = styled('iframe')(() => ({
   minHeight: '80vh',
-  height: '100%',
   width: '100%',
-  border: '3px solid #888',
-  borderRadius: '0.7rem'
+  border: '1px solid #777',
+  boxShadow:
+    '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);',
+  transition: 'all 300ms ease-in-out',
+  margin: '0 auto'
 }));
+
+type IFrameWidthKeys = keyof typeof iframeWidth;
+const iframeWidth = { computer: '100%', phone: '20rem' };
 
 const IFrame = ({ children, ...props }: Props) => {
   const [contentRef, setContentRef] = useState<any>(null);
+  const [displayMode, setDisplayMode] = useState<IFrameWidthKeys>('computer');
   // const contentRef = useRef<HTMLIFrameElement>(null);
   const mountNode = contentRef?.contentWindow?.document?.body;
 
@@ -28,18 +43,51 @@ const IFrame = ({ children, ...props }: Props) => {
     // prepend: true
   });
 
+  console.log(displayMode);
+
   return (
-    <PreviewIfame {...props} ref={setContentRef}>
-      {mountNode != null
-        ? createPortal(
-            <CacheProvider value={cache}>
-              <CssBaseline />
-              {children}
-            </CacheProvider>,
-            mountNode
-          )
-        : null}
-    </PreviewIfame>
+    <>
+      <Stack spacing={2} width="100%">
+        <Box>
+          <FormControl>
+            <InputLabel id="display-mode-label">顯示裝置</InputLabel>
+            <Select
+              labelId="display-mode-label"
+              id="display-mode-select"
+              value={displayMode}
+              label="display-mode"
+              onChange={(e: SelectChangeEvent<IFrameWidthKeys>) => {
+                const value = e.target.value;
+                if (Object.keys(iframeWidth).includes(value)) {
+                  setDisplayMode(value as IFrameWidthKeys);
+                }
+              }}
+            >
+              <MenuItem value="computer">Computer</MenuItem>
+              <MenuItem value="phone">Phone</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+
+        <Box display="flex">
+          <PreviewIfame
+            {...props}
+            style={{ width: iframeWidth[displayMode] }}
+            ref={setContentRef}
+          >
+            {mountNode != null
+              ? createPortal(
+                  <CacheProvider value={cache}>
+                    <CssBaseline />
+                    {children}
+                  </CacheProvider>,
+                  mountNode
+                )
+              : null}
+          </PreviewIfame>
+        </Box>
+      </Stack>
+    </>
   );
 };
 

@@ -1,13 +1,9 @@
-import { type Dispatch, type SetStateAction } from 'react';
 import { matchIsValidColor, MuiColorInput } from 'mui-color-input';
 import styled from '@emotion/styled';
 import { Controller, type Control } from 'react-hook-form';
 
-import {
-  type FormValuesType,
-  type PageContentType
-} from '@/src/components/page/Index';
-import { Typography } from '@mui/material';
+import { type FormValuesType } from '@/src/components/page/Index';
+import { Box, Stack, Typography } from '@mui/material';
 
 type Props = {
   control: Control<FormValuesType>;
@@ -30,9 +26,9 @@ const PoMuiColorInput = styled(MuiColorInput)`
 
 const ColorPicker = ({ control }: Props) => {
   return (
-    <div className="space-y-7">
-      <div>
-        <Typography component="h2">TEXT COLOR</Typography>
+    <Stack spacing={2} direction={{ sx: 'column', lg: 'row' }}>
+      <Box>
+        <Typography component="h2">頁首文字顏色</Typography>
         <Controller
           name="textColor"
           control={control}
@@ -46,11 +42,11 @@ const ColorPicker = ({ control }: Props) => {
             />
           )}
         />
-      </div>
-      <div>
-        <Typography component="h2">BG COLOR</Typography>
+      </Box>
+      <Box>
+        <Typography component="h2">主題色</Typography>
         <Controller
-          name="bgColor"
+          name="primaryColor"
           control={control}
           rules={{ validate: matchIsValidColor }}
           render={({ field, fieldState }) => (
@@ -62,8 +58,8 @@ const ColorPicker = ({ control }: Props) => {
             />
           )}
         />
-      </div>
-    </div>
+      </Box>
+    </Stack>
   );
 };
 
