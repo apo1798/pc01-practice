@@ -31,6 +31,7 @@ import {
 import ImageSwiper from '@/src/donation/ImageSwiper';
 import TextEditor from '@/src/components/TextEditor';
 import { useSnackbar } from 'notistack';
+import Link from 'next/link';
 
 export type PageContentType = {
   textColor: string;
@@ -388,6 +389,13 @@ const IndexPage = () => {
           </Grid>
         </FormikProvider>
       </Stack>
+      <Link
+        className="sticky left-full bottom-2 inline-block rounded
+        bg-sky-200 px-2 py-1 no-underline visited:text-black"
+        href="/preview"
+      >
+        預覽頁面
+      </Link>
     </section>
   );
 };
