@@ -13,6 +13,7 @@ import {
 import { type Editor as TinyMceEditor } from 'tinymce';
 import { type FormValuesType } from '@/src/components/page/Index';
 import { Typography } from '@mui/material';
+import { useFormikContext } from 'formik';
 
 // Dynamically imports tinymce, making only available in client side
 const Editor = dynamic(
@@ -23,14 +24,16 @@ const Editor = dynamic(
   }
 );
 
-type Props = {
-  register: UseFormRegister<FormValuesType>;
-  control: Control<FormValuesType>;
-};
+// type Props = {
+//   register: UseFormRegister<FormValuesType>;
+//   control: Control<FormValuesType>;
+// };
 
-const TextEditor = ({ register, control }: Props) => {
+const TextEditor = () => {
   const editorRef = useRef<TinyMceEditor>(null);
   const formIsReset = useRef(false);
+
+  const { values, setFieldValue } = useFormikContext<FormValuesType>();
 
   // 為了解決 onEditorChange 編譯 HTML entity 導致 form 變成 dirty,但如果進來的 html 不需要轉譯時，又會導致 resetForm 被呼叫，因此在這再加上 useEffect。在時間內就限制 restform 不能被觸發。
   // useEffect(() => {
@@ -49,7 +52,54 @@ const TextEditor = ({ register, control }: Props) => {
       <Typography component="h3" variant="h6">
         組織文案
       </Typography>
-      <Controller
+      <Editor
+        tinymceScriptSrc="/assets/libs/tinymce/tinymce.min.js"
+        // make mce package available on our package
+        apiKey={process.env.TINYMCE_API_KEY}
+        onInit={(_, editor) => (editorRef.current = editor)}
+        value={values.pageHtml}
+        onEditorChange={(value) => {
+          setFieldValue('pageHtml', value);
+
+          // if (formIsReset.current) return;
+          // resetForm();
+          // formIsReset.current = true;
+        }}
+        init={{
+          entity_encoding: 'raw',
+          height: 600,
+          menubar: false,
+          plugins: [
+            'codesample',
+            'advlist',
+            'autolink',
+            'lists',
+            'link',
+            'image',
+            'charmap',
+            'preview',
+            'anchor',
+            'searchreplace',
+            'visualblocks',
+            'code',
+            'fullscreen',
+            'insertdatetime',
+            'media',
+            'table',
+            'code',
+            'help',
+            'wordcount'
+          ],
+          toolbar:
+            'undo redo | blocks | underline' +
+            'bold italic forecolor backcolor image link preview | alignleft aligncenter ' +
+            'alignright alignjustify | bullist numlist outdent indent code | ' +
+            'removeformat wordcount help ',
+          content_style:
+            'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+        }}
+      />
+      {/* <Controller
         name="pageHtml"
         control={control}
         render={({ field: { onChange, value: initialValue } }) => {
@@ -60,11 +110,10 @@ const TextEditor = ({ register, control }: Props) => {
                 // make mce package available on our package
                 apiKey={process.env.TINYMCE_API_KEY}
                 onInit={(_, editor) => (editorRef.current = editor)}
-                value={initialValue}
+                value={values.pageHtml}
                 onEditorChange={(value) => {
-                  console.log(value);
-                  onChange(value);
-                  // setFieldValue('descriptionHtml', value);
+                  setFieldValue('pageHtml', value);
+
                   // if (formIsReset.current) return;
                   // resetForm();
                   // formIsReset.current = true;
@@ -106,7 +155,7 @@ const TextEditor = ({ register, control }: Props) => {
             </>
           );
         }}
-      />
+      /> */}
     </div>
   );
 };

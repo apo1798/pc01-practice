@@ -4,6 +4,7 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
+import { SnackbarProvider } from 'notistack';
 
 // import { theme } from '@/src/components/layout/theme';
 
@@ -13,10 +14,12 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       {/* <ThemeProvider theme={theme}> */}
-      <CacheProvider value={globalCache}>
-        <CssBaseline />
-        <Component {...pageProps} />
-      </CacheProvider>
+      <SnackbarProvider maxSnack={10}>
+        <CacheProvider value={globalCache}>
+          <CssBaseline />
+          <Component {...pageProps} />
+        </CacheProvider>
+      </SnackbarProvider>
       {/* </ThemeProvider> */}
     </>
   );

@@ -29,7 +29,7 @@ const PreviewIfame = styled('iframe')(() => ({
 }));
 
 type IFrameWidthKeys = keyof typeof iframeWidth;
-const iframeWidth = { computer: '100%', phone: '20rem' };
+const iframeWidth = { computer: '100%', phone: '20rem' } as const;
 
 const IFrame = ({ children, ...props }: Props) => {
   const [contentRef, setContentRef] = useState<any>(null);
@@ -42,8 +42,6 @@ const IFrame = ({ children, ...props }: Props) => {
     container: contentRef?.contentWindow?.document?.head
     // prepend: true
   });
-
-  console.log(displayMode);
 
   return (
     <>
@@ -58,7 +56,8 @@ const IFrame = ({ children, ...props }: Props) => {
               label="display-mode"
               onChange={(e: SelectChangeEvent<IFrameWidthKeys>) => {
                 const value = e.target.value;
-                if (Object.keys(iframeWidth).includes(value)) {
+                // if (Object.keys(iframeWidth).find(el => el===value)) {
+                if (value in iframeWidth) {
                   setDisplayMode(value as IFrameWidthKeys);
                 }
               }}
@@ -78,6 +77,11 @@ const IFrame = ({ children, ...props }: Props) => {
             {mountNode != null
               ? createPortal(
                   <CacheProvider value={cache}>
+                    <script
+                      src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-element-bundle.min.js"
+                      defer
+                    ></script>
+
                     <CssBaseline />
                     {children}
                   </CacheProvider>,

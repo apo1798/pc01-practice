@@ -32,6 +32,7 @@ module.exports = {
           attributes: false
         }
       }
-    ]
+    ],
+    '@typescript-eslint/strict-boolean-expressions': 'off'
   }
 };

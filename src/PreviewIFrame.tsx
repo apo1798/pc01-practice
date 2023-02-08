@@ -4,14 +4,13 @@ import { Box, Typography } from '@mui/material';
 import IFrame from '@/src/components/IFrame';
 import { type FormValuesType } from '@/src/components/page/Index';
 import NoSsr from '@/src/components/utils/NoSsr';
-import DividerHeader from '@/src/components/layout/DividerHeader';
 import ImageSection from '@/src/donation/ImageSection';
 import TextSection from '@/src/donation/TextSection';
 
 type Props = { formValues: FormValuesType };
 
 const PreviewIFrame = ({ formValues }: Props) => {
-  const { textColor, primaryColor, pageHtml, title, donations, imageUrl } =
+  const { textColor, primaryColor, pageHtml, title, donations, images } =
     formValues;
 
   return (
@@ -46,12 +45,13 @@ const PreviewIFrame = ({ formValues }: Props) => {
               gap={2}
             >
               {/* Content Section */}
-              <ImageSection imageUrl={imageUrl} bgColor={primaryColor} />
+              <ImageSection images={images} primaryColor={primaryColor} />
 
               <TextSection
                 title={title}
                 pageHtml={pageHtml}
                 primaryColor={primaryColor}
+                donations={donations}
               />
             </Box>
           </Box>

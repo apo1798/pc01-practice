@@ -1,12 +1,17 @@
-import { matchIsValidColor, MuiColorInput } from 'mui-color-input';
+import { MuiColorInput } from 'mui-color-input';
 import styled from '@emotion/styled';
-import { Controller, type Control } from 'react-hook-form';
 
 import { type FormValuesType } from '@/src/components/page/Index';
 import { Box, Stack, Typography } from '@mui/material';
+import { useFormikContext } from 'formik';
+
+// setFieldValue={setFieldValue}
+// primaryColor={values.primaryColor}
+// textColor={values.textColor}
 
 type Props = {
-  control: Control<FormValuesType>;
+  primaryColor: string;
+  textColor: string;
 };
 
 const PoMuiColorInput = styled(MuiColorInput)`
@@ -24,43 +29,43 @@ const PoMuiColorInput = styled(MuiColorInput)`
   }
 `;
 
-const ColorPicker = ({ control }: Props) => {
-  return (
-    <Stack spacing={2} direction={{ sx: 'column', lg: 'row' }}>
+const ColorPicker = () =>
+  // { primaryColor, textColor }: Props
+  {
+    const {
+      setFieldValue,
+      values: { textColor, primaryColor }
+    } = useFormikContext<FormValuesType>();
+
+    return (
       <Box>
-        <Typography component="h2">頁首文字顏色</Typography>
-        <Controller
-          name="textColor"
-          control={control}
-          rules={{ validate: matchIsValidColor }}
-          render={({ field, fieldState }) => (
+        <Typography component="h4" variant="h6" fontWeight="500" flexShrink="0">
+          顏色設定
+        </Typography>
+        <Stack spacing={2} direction={{ sx: 'column', md: 'row' }}>
+          <Box>
+            <Typography component="h2">頁首文字顏色</Typography>
             <PoMuiColorInput
-              {...field}
               format="hex"
-              helperText={fieldState.invalid ? 'Color is invalid' : ''}
-              error={fieldState.invalid}
+              value={textColor}
+              onChange={(value) => {
+                setFieldValue('textColor', value);
+              }}
             />
-          )}
-        />
-      </Box>
-      <Box>
-        <Typography component="h2">主題色</Typography>
-        <Controller
-          name="primaryColor"
-          control={control}
-          rules={{ validate: matchIsValidColor }}
-          render={({ field, fieldState }) => (
+          </Box>
+          <Box>
+            <Typography component="h2">主題色</Typography>
             <PoMuiColorInput
-              {...field}
               format="hex"
-              helperText={fieldState.invalid ? 'Color is invalid' : ''}
-              error={fieldState.invalid}
+              value={primaryColor}
+              onChange={(value) => {
+                setFieldValue('primaryColor', value);
+              }}
             />
-          )}
-        />
+          </Box>
+        </Stack>
       </Box>
-    </Stack>
-  );
-};
+    );
+  };
 
 export default ColorPicker;
