@@ -6,21 +6,21 @@ import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 import { SnackbarProvider } from 'notistack';
 
-// import { theme } from '@/src/components/layout/theme';
+import { theme } from '@/src/components/layout/theme';
 
 const globalCache = createCache({ key: 'css' });
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      {/* <ThemeProvider theme={theme}> */}
-      <SnackbarProvider maxSnack={10}>
-        <CacheProvider value={globalCache}>
-          <CssBaseline />
-          <Component {...pageProps} />
-        </CacheProvider>
-      </SnackbarProvider>
-      {/* </ThemeProvider> */}
+      <ThemeProvider theme={theme}>
+        <SnackbarProvider maxSnack={10}>
+          <CacheProvider value={globalCache}>
+            <CssBaseline />
+            <Component {...pageProps} />
+          </CacheProvider>
+        </SnackbarProvider>
+      </ThemeProvider>
     </>
   );
 }

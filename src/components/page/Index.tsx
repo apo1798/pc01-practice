@@ -147,7 +147,7 @@ const IndexPage = () => {
                 p={2}
                 borderRadius={1}
               >
-                <Typography component="h3" variant="h5" fontWeight="bold">
+                <Typography component="h3" variant="h3" fontWeight="bold">
                   介紹設定
                 </Typography>
 
